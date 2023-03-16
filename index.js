@@ -28,7 +28,7 @@ async function orderFetch(res) {
     publicLibrary: publicData.library,
     smallLibrary: smallData.library,
   };
-  
+
   res.json(result);
 };
 
@@ -45,33 +45,32 @@ function getData(libraryString) {
       if (total >= 1000) {
         const turn = Math.ceil(total / 1000);
         const remainNum = total % 1000;
-        // data = [...data];
 
         for (let i = 2; i <= turn; i++) {
           const START_INDEX = 1000 * i - 1000;
           const END_INDEX = 1000 * i - 1;
 
-          fetch(`${api}${libraryString}/${START_INDEX}/${END_INDEX}/`)
-            .then(response => response.json())
+          return fetch(`${api}${libraryString}/${START_INDEX}/${END_INDEX}/`)
+            .then((response) => response.json())
             .then((res) => {
-              // [TODO] 조건문 다시살필 필요가 있음
-              // 마지막 반복이 아닐 경우 동작
-              if (i != turn) {
+              if (i !== turn) {
                 data.push(...res[libraryString].row);
-                return;
-              }
+              } else if (i === turn) {
+                // 마지막 반복문 실행시
+                if (remainNum !== 0) {
+                  data.push(...res[libraryString].row);
+                }
 
-              // 마지막 반복에서만 동작
-              if (remainNum !== 0) {
-                data = [...data, ...res[libraryString].row];
+                return { total, library: classifyData(data) };
               }
-            });
+            })
+            .catch((err) => console.log(`🚩 ${err}`));
         }
+      } else {
+        return { total, library: classifyData(data) };
       }
-      
-      return { total, library: classifyData(data) };
     })
-    .catch((err) => err);
+    .catch((err) => console.log(`⛔️ ${err}`));
 };
 
 function classifyData(data) {
