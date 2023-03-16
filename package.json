@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Kim-eun-bin-1007/nearbybooks-api#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.2"
   }
 }
