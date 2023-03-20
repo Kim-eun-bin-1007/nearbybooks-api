@@ -4,7 +4,9 @@ const fetch = require('node-fetch')
 const app = express();
 const port = 8080;
 
-app.use(cors({ origin: "https://nearbybooks.vercel.app" }));
+app.use(
+  cors({ origin: ["https://nearbybooks.vercel.app", "http://localhost:3000"] })
+);
 
 app.get('/', (req, res) => {
   orderFetch(res);
